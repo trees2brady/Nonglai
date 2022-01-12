@@ -1,0 +1,345 @@
+﻿{% extends 'base_price.html' %}
+{% load staticfiles %}
+{% block jg3 %}style="background-color:#d0e9c6"{% endblock %}
+{% block type %}价格预测{% endblock %}
+{% block price %}
+<!--主体部分开始-->
+<div class="main_price">
+  <div class="row">
+    <!--左栏开始-->
+    <div class="col-md-4">
+      <div class="form-left-wrap">
+        <div class="form-main">
+          <div id="legend" class="form-title">
+            <legend class="">价格预测</legend>
+          </div>
+          <!-- 按字母索引开始-->
+{#          <div class="zimu">#}
+{#            <div>按字母索引：</div>#}
+{#            <a href="" class="interval active">A</a> <a href="" class="interval">B</a> <a href="" class="interval">C</a> <a href="" class="interval">D</a> <a href="" class="interval">E</a> <a href="" class="interval">F</a> <a href="" class="interval">G</a> <a href="" class="interval">H</a> <a href="" class="interval">I</a> <a href="" class="interval">J</a> <a href="" class="interval">K</a> <a href="" class="interval">L</a> <a href="" class="interval">M</a> <a href="" class="interval">N</a> <a href="" class="interval">O</a> <a href="" class="interval">P</a> <a href="" class="interval">Q</a> <a href="" class="interval">R</a> <a href="" class="interval">S</a> <a href="" class="interval">T</a> <a href="" class="interval">U</a> <a href="" class="interval">V</a> <a href="" class="interval">W</a> <a href="" class="interval">X</a> <a href="" class="interval">Y</a> <a href="" class="interval">Z</a>#}
+{#            <div class="zimusuoyin"> <a href="" class="interval">国光苹果</a> <a href="" class="interval">蛤蜊</a> <a href="" class="interval">枸杞二级</a> <a href="" class="interval">光皮黄瓜</a> <a href="" class="interval">高粱</a> </div>#}
+{#          </div>#}
+          <!-- 按字母索引结束-->
+		  <div style="padding-top: 10px">
+          <form class="form-horizontal" action="{% url 'products:price_predict' %}" method="post" autocomplete="off" id="form1" name="form1" onSubmit="return checkSEDate2();">
+              {% csrf_token %}
+
+            <div class="form-group">
+              <label for="inputPassword3" class="col-sm-3 control-label">地区</label>
+              <div class="col-sm-6">
+                <select  class="input-sm form-control" style="padding-top: 1px; padding-bottom: 1px" onchange="ajax_load_market(this)" name="province" id="province_select">
+                  <option value="">请选择</option>
+                  {% for province in provinces %} <option value="{{ province.provinceid }}">{{ province.provincename }}</option>{% endfor %}
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="inputPassword3" class="col-sm-3 control-label">市场</label>
+              <div class="col-sm-6">
+                  <select class="input-sm form-control" style="padding-top: 1px; padding-bottom: 1px" id="all_markets" name="market">
+                    <option value="">请选择</option>
+                      {% for market in markets %} <option value="{{ market.marketid }}">{{ market.marketname }}</option>{% endfor %}
+                  </select>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="col-sm-3 control-label">产品种类</label>
+              <div class="col-sm-6">
+              <select class="input-sm form-control" onchange="ajax_load_product()" name="category" id="category_select">
+                <option value="">请选择</option>
+                 {% for category in categories %} <option value="{{ category.categoryid }}">{{ category.categoryname }}</option>{% endfor %}
+              </select>
+            </div>
+            </div>
+
+            <div class="form-group">
+                <label for="inputPassword3" class="col-sm-3 control-label">产品名称</label>
+                <div class="col-sm-6">
+                    <select class="input-sm form-control"  id="all_products" name="product" style="padding-top: 1px; padding-bottom: 1px">
+                         <option value="">请选择</option>
+                        {% for product in products %} <option>{{ product.productname }}</option>{% endfor %}
+                    </select>
+                </div>
+            </div>
+
+
+
+
+            <div class="form-group">
+              <div class="controls center">
+                  <input type="hidden" name="btn_submit" id="btn_submit">
+                  <button id="inquiry_btn" type="button" class="btn btn-success" onclick="ajax_load_product(this)">价格预测</button>
+              </div>
+            </div>
+          </form>
+
+		  </div>
+
+		  </div>
+      </div>
+    </div>
+    <!--左栏结束-->
+    <!--右栏开始-->
+    <div class="col-md-8 ">
+         {% if msg %}<div>{{ msg }}</div>{% endif %}
+      <!--form-right-wrap开始-->
+      <div class="form-right-wrap-analysis">
+        <div class="news-analysisright-wrapper">
+         <!--标题开始-->
+        <div>
+            <h4 class="text-center">  {{ product_post.productname }}在{{ market_post.marketname }}<br/>价格预测图<br/>&nbsp;</h4>
+        </div>
+        <!--标题结束-->
+		  <!--图表展示开始-->
+          <div id="main" style="width: 850px;height:400px;"></div>
+		 <!--图表展示结束-->
+	 <!-- 收藏区开始-->
+	      <div class="wrap-newsdetails-left"><div class="collection">
+{#      <button type="button" class="btn btn-danger"> <span class="glyphicon glyphicon-star-empty" aria-hidden="true"></span> &nbsp;收&nbsp;藏 </button>#}
+      <!--	<button type="button" class="btn btn-danger active">
+	<span class="glyphicon glyphicon-star" aria-hidden="true"></span>已收藏
+	</button>-->
+	</div>
+	  <!--收藏区结束-->
+
+{#        </div>#}
+{#         <!--标题开始-->#}
+{#        <div>#}
+{#            <h4 class="text-center">  {{ product_post.productname }}在{{ market_post.marketname }}<br/>价格预测表<br/>&nbsp;</h4>#}
+{#        </div>#}
+{#        <!--标题结束-->#}
+{#        <table class="table table-bordered table-hover text-center">#}
+{#          <tr class="success">#}
+{#            <th class="text-center">日期</th>#}
+{#            <th class="text-center">产品</th>#}
+{#            <th class="text-center">市场</th>#}
+{#            <th class="text-center">模型Ⅰ价格</th>#}
+{#            <th class="text-center">模型Ⅱ价格</th>#}
+{#          </tr>#}
+{##}
+{#            {% for table in table_pre %}#}
+{#          <tr>#}
+{#            <td>{{ table.0 }}</td>#}
+{#            <td>{{ product_post.productname }}</td>#}
+{#            <td>{{ market_post.marketname }}</td>#}
+{#            <td>{{ table.1}}</td>#}
+{#            <td>{{ table.2 }}</td>#}
+{#          </tr>#}
+{#          {% endfor %}#}
+{##}
+{#        </table>#}
+{#       <!--分页开始-->#}
+{#        <div class="center">#}
+{#          <nav aria-label="Page navigation">#}
+{#            <ul class="pagination">#}
+{#              <li> <a href="#" aria-label="Previous"> <span aria-hidden="true">&laquo;</span> </a> </li>#}
+{#              <li><a href="#">1</a></li>#}
+{#              <li><a href="#">2</a></li>#}
+{#              <li><a href="#">3</a></li>#}
+{#              <li><a href="#">4</a></li>#}
+{#              <li><a href="#">5</a></li>#}
+{#              <li> <a href="#" aria-label="Next"> <span aria-hidden="true">&raquo;</span> </a> </li>#}
+{#            </ul>#}
+{#          </nav>#}
+{#        </div>#}
+{#        <!--分页结束-->#}
+
+                  <!--右栏文字简单说明开始-->
+		  <div class="panel-style">
+          <div class="panel panel-danger">
+{#            <div class="panel-heading">#}
+{#              <h3 class="panel-title">分析</h3>#}
+{#            </div>#}
+            <div class="panel-body">
+                <p>以上预测结果分别通过模型Ⅰ:LSTM（长短记忆神经网络）和模型Ⅱ:EMD-SVR（经验模式分解-支持向量回归）模型得出，根据经验判断，较近日期的预测结果可参考性相对较强。所有预测结果仅提供参考信息，不构成实际意见。</p>
+
+
+             </div>
+          </div>
+		  </div>
+          <!--右栏文字简单说明结束-->
+
+		  </div>
+      <!--form-right-wrap结束-->
+    </div>
+    <!-- 右栏结束-->
+  </div>
+</div>
+</div>
+
+<script type="text/javascript">
+var myChart = echarts.init(document.getElementById('main'));
+
+const colors = [ '#5793f3',  '#d14a61', '#675bba', '#339a2b', '#F96D00', '#971549'];
+option = {
+    color: colors,
+    title: {
+        text: '',
+        subtext: ''
+    },
+    tooltip: {
+        trigger: 'axis',
+        axisPointer: {
+            type: 'cross',
+            label: {
+                backgroundColor: '#3B9DFC'
+            }
+        }
+    },
+    legend: {
+        data: ['LSTM（长短记忆神经网络）预测','EMD-SVR（经验模式分解-支持向量回归）预测','历史价格'],
+        selected: {
+
+        }
+    },
+    grid: {
+        left: '3%',
+        right: '4%',
+        bottom: '3%',
+        containLabel: true
+    },
+    toolbox: {
+        feature: {
+            saveAsImage: {}
+        }
+    },
+    xAxis: {
+        name:'日期',
+        type: 'category',
+        boundaryGap: false,
+        data: {{ time_set|safe }},
+    },
+    yAxis: [{
+        name: '价格（元/公斤）',
+        type: 'value',
+        axisLabel: {
+            formatter: '{value}'
+        }
+    }],
+
+    series: [{
+            "type": "line",
+            markArea: {
+                data: [
+                    [{
+                        name: '未来价格',
+                        xAxis: "{{ starttime}}"
+                    }, {
+                        xAxis: "{{ endtime }}"
+                    }]
+                ]
+            }
+        }, {
+            "name": "LSTM（长短记忆神经网络）预测",
+            "type": "line",
+            "data":{{ price_set1|safe }} ,
+}, {
+            "name": "EMD-SVR（经验模式分解-支持向量回归）预测",
+            "type": "line",
+            "data": {{ price_set2|safe }},
+    },{
+            "name": "历史价格",
+            "type": "line",
+            "data": {{ price_his|safe }},
+    },
+    ]
+};
+myChart.setOption(option);
+</script>
+
+
+
+<script type="text/javascript">
+    {% if miss %}
+        alert('{{ miss }}')
+    {% endif %}
+function ajax_load_product(e) {
+    var form1 = document.getElementById("form1");
+    var e_id = $(e).attr('id')
+    var category=document.forms["form1"]["category"].value;
+    var product=document.forms["form1"]["product"].value;
+    var province=document.forms["form1"]["province"].value;
+    var market=document.forms["form1"]["market"].value;
+
+    if(e_id=='inquiry_btn'){
+        if(product=='' || category=="" || province==""||market==""){
+            alert("有筛选信息未填写，请检查！");
+            return false;
+        }
+        $("#btn_submit").val("true");
+        form1.submit();
+    }
+    else{
+        $.ajax({
+            cache:false,
+            type:"POST",
+            url:"{% url 'products:price_analysis2' %}",
+            data:{
+                'category':$("#category_select").val(),
+                'market':$("#all_markets").val()
+            },
+            async:true,
+            beforeSend:function (xhr,settings) {
+                xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}")
+            },
+            success:function (data) {
+                if(data.status == 'success'){
+                        var selection1 = $("#all_products");
+                        selection1.find("option").remove();
+                        selection1.append("<option value=''>请选择</option>");
+                        for(var x in data){
+                            if(x=='product')
+                                for(var y in data[x])
+                                    selection1.append("<option value='"+y+"'>"+data[x][y]+"</option>");
+                        }
+                        selection.width(153);
+                    }
+                }
+            })}
+}
+</script >
+
+<script type="text/javascript">
+function ajax_load_market(e) {
+{#    var form1 = document.getElementById("form1");#}
+    var e_id = $(e).attr('id')
+    if(e_id=='province_select'){
+        $.ajax({
+            cache:false,
+            type:"POST",
+            url:"{% url 'products:price_analysis2' %}",
+            data:{
+                'province':$("#province_select").val(),
+                'product':$("#all_products").val(),
+                'verify':'yes'
+            },
+            async:true,
+            beforeSend:function (xhr,settings) {
+                xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}")
+            },
+            success:function (data) {
+                if(data.status == 'success'){
+                        var selection2 = $("#all_markets");
+                        selection2.find("option").remove();
+                        selection2.append("<option value=''>请选择</option>");
+                        for(var x in data){
+                            if(x=='market')
+                                for(var y in data[x])
+                                    selection2.append("<option value='"+y+"'>"+data[x][y]+"</option>");
+                        }
+                        selection.width(153);
+                    }
+                }
+            })
+    }
+
+}
+</script >
+
+
+
+{% endblock %}
+
+

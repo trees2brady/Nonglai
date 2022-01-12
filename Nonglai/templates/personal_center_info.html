@@ -1,0 +1,78 @@
+﻿{% extends 'personal_center_base.html' %}
+{% load staticfiles %}
+{% block pc_content %}
+<!--右边部分开始-->
+<div class="col-md-9">
+    <!--panel开始-->
+    <div class="panel panel-success">
+        <div class="panel-heading">
+            <h3 class="panel-title">个人信息</h3>
+        </div>
+        <div class="panel-body">
+            <div class="personal-right-wrapper">
+                <div class="row">
+                    <!--头像开始-->
+                    <div class="col-md-3">
+                        <div class="user_pic"><img src="{% static 'images/user_logo.png' %}" alt="" class="img-circle img-responsive"></div>
+                    </div>
+                    <!--头像结束-->
+                    <!--信息开始-->
+                    <div class="col-md-9">
+                        <div class="personal-info-wrapper">
+                        <form method="post" action="{% url 'PersonalCenter' %}" autocomplete="off">
+                            <ul class="list-group">
+                                <li class="list-group-item" style="height: 47px">用户名：<label>{{ request.user.username }}</label><input type="text" style="display: none" name="user_name" value="{{ request.user.username }}"></li>
+{#                                <li class="list-group-item">性  &nbsp;&nbsp;&nbsp;别：<label>{{ gender }}</label></li>#}
+                                <li class="list-group-item" style="height: 47px">生  &nbsp;&nbsp;&nbsp;日：<label>{{ user_brithday }}</label><input type="text" class="date" style="display: none" name="user_brithday" value="{{ user_brithday }}" readonly="readonly"></li>
+                                <li class="list-group-item" style="height: 47px">邮  &nbsp;&nbsp;&nbsp;箱：<label>{{ request.user.email }}</label><input type="text" style="display: none" name="user_email" value="{{ request.user.email }}"></li>
+                                <li class="list-group-item" style="height: 47px">手机号：{% if request.user.mobile %}<label>{{ request.user.mobile }}</label>{% endif %}<input type="text" style="display: none" name="user_mobile" {% if request.user.mobile %}value="{{ request.user.mobile }}{% endif %}"></li>
+                                <li class="list-group-item" style="height: 47px">所在地：<label>{{ request.user.address }}</label><input type="text" style="display: none" name="user_address" value="{{ request.user.address }}"></li>
+                            </ul>
+                            <div class="modify-button">
+                                <button type="button" class="btn btn-success" onclick="chang_info()">修改信息</button>
+                                <input type="submit" class="btn btn-success" style="display: none" value="提交"></input>
+                                <input type="button" class="btn btn-success" style="display: none" onclick="cancel_change()" value="取消"></input>
+{#                                <button type="button" class="btn btn-success">修改密码</button>#}
+                            </div>
+                        {% csrf_token %}
+                        </form>
+                        </div>
+                    </div>
+                    <!--信息结束-->
+                </div>
+            </div>
+        </div>
+        <!--右边部分结束-->
+    </div>
+</div>
+<script src="{% static 'js/bootstrap-datetimepicker.min.js' %}"></script>
+<script src="{% static 'js/bootstrap-datetimepicker.zh-CN.js' %}"></script>
+<script type="text/javascript">
+    {% if msg %}
+        alert('{{ msg }}');
+    {% endif %}
+    function chang_info() {
+        $('button').attr('style','display:none');
+        $('label').attr('style','display:none');
+        $('input').removeAttr('style','display:none')
+    }
+    function cancel_change() {
+        $('button').removeAttr('style','display:none');
+        $('label').removeAttr('style','display:none');
+        $('input').attr('style','display:none')
+    }
+    $(".date").datetimepicker({//选择年月日
+        format: 'yyyy-mm-dd',
+        language: 'zh-CN',
+        weekStart: 1,
+        todayBtn: 1,//显示‘今日’按钮
+        autoclose: 1,
+        todayHighlight: 1,
+        startView: 2,
+        minView: 2,  //Number, String. 默认值：0, 'hour'，日期时间选择器所能够提供的最精确的时间选择视图。
+        clearBtn: true,//清除按钮
+        forceParse: 0
+    });
+</script>
+<!--panel结束-->
+{% endblock %}

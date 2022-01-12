@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>农莱</title>
+</head>
+<body>
+<form action="{% url 'forget' %}" method="post" autocomplete="off">
+    <ul>
+        <li><label>邮箱：</label><input type="text" name="email" /></li>
+        <li><div><label>邮箱：</label>{{ forgetpwd_form.checkword }}</div></li>
+        <li><div class="error btns">{% for error in forgetpwd_form.errors.items %}{{ error }}{% endfor %}{{ msg }}</div></li>
+        <li><button type="submit">发送</button></li>
+    </ul>
+{% csrf_token %}
+</form>
+</body>
+</html>

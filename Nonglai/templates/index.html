@@ -1,0 +1,434 @@
+﻿{% extends 'base.html' %}
+{% load staticfiles %}
+{% block content %}
+	<link href="{% static 'css/style_index.css' %}" rel="stylesheet" type="text/css" media="all">
+	<div class="main-body">
+		<div class="wrap" style="width: 95%">
+			<div class="col-md-8 content-left">
+	<!--轮播图开始-->
+	<div id="ad-carousel" class="carousel slide" data-ride="carousel">
+		<!--小点点-->
+		<ol class="carousel-indicators">
+			<li data-target="#ad-carousel" data-slide-to="0" class="active"></li>
+			<li data-target="#ad-carousel" data-slide-to="1"></li>
+			<li data-target="#ad-carousel" data-slide-to="2"></li>
+			<li data-target="#ad-carousel" data-slide-to="3"></li>
+{#			<li data-target="#ad-carousel" data-slide-to="4"></li>#}
+		</ol>
+		<!--图片内容-->
+		<div class="carousel-inner">
+			<div class="item active">
+				<img src="{% static 'images/banner1.jpg' %}" alt="1 slide">
+	
+				<div class="container">
+					<div class="carousel-caption" >
+						<h1>农莱小站</h1>	
+						<p>一站式提供农业新闻、价格行情等资讯服务。</p>						
+{#						<p><a class="btn btn-lg btn-info hidden" href="http://www.firefox.com.cn/download/" target="_blank"#}
+{#							  role="button">点我进入</a></p>#}
+						<h1>&nbsp;  </h1>
+						<h1>&nbsp;  </h1>
+						<p>&nbsp;  </p>
+						<p>&nbsp;  </p>
+						<p>&nbsp;  </p>
+						<p>&nbsp;  </p>
+						<p>&nbsp;  </p>
+						<p>&nbsp;  </p>
+						<p>&nbsp;  </p>
+					</div>
+				</div>
+			</div>
+			<div class="item">
+				<img src="{% static 'images/banner2.jpg' %}" alt="2 slide">
+	
+				<div class="container">
+					<div class="carousel-caption">
+						<h1>农业资讯</h1>
+	
+						<p>国家政策、行情解读、农业百科、气象灾害等新闻，应有尽有。</p>
+                        <p>&nbsp;  </p>
+						<p><a class="btn btn-lg btn-primary" href="{% url 'news:news_list' 0 %}" target="_blank"
+							  role="button">点我进入</a></p>
+						<h1>&nbsp;  </h1>
+						<h1>&nbsp;  </h1>
+						<p>&nbsp;  </p>
+						<p>&nbsp;  </p>
+						<p>&nbsp;  </p>
+						<p>&nbsp;  </p>
+						<p>&nbsp;  </p>
+							  
+					</div>
+				</div>
+			</div>
+			<div class="item">
+				<img src="{% static 'images/banner3.jpg' %}" alt="3 slide" center>
+	
+				<div class="container">
+					<div class="carousel-caption">
+						<h1>价格行情</h1>
+						<p>获取农产品市场价格，便捷进行价格预测。</p>
+                        <p>&nbsp;  </p>
+						<p><a class="btn btn-lg btn-primary" href="{% url 'products:price_inquiry' %}" target="_blank"
+							  role="button">点我进入</a></p>
+						<h1>&nbsp;  </h1>
+						<h1>&nbsp;  </h1>
+						<p>&nbsp;  </p>
+						<p>&nbsp;  </p>
+						<p>&nbsp;  </p>
+						<p>&nbsp;  </p>
+						<p>&nbsp;  </p>							  
+					</div>
+				</div>
+			</div>
+{#			<div class="item">#}
+{#				<img src="{% static 'images/banner4.jpg' %}" alt="4 slide">#}
+{#	#}
+{#				<div class="container">#}
+{#					<div class="carousel-caption">#}
+{#						<h1>论坛互动</h1>#}
+{#						<p>畅情讨论，积极分享；有难题，大家来帮忙。</p>#}
+{#						<p><a class="btn btn-lg btn-primary" href="http://www.opera.com/zh-cn" target="_blank"#}
+{#							  role="button">点我进入</a></p>#}
+{#						<p>&nbsp;  </p>#}
+{#						<p>&nbsp;  </p>#}
+{#						<p>&nbsp;  </p>#}
+{#						<p>&nbsp;  </p>#}
+{##}
+{#					</div>#}
+{#				</div>#}
+{#			</div>#}
+			<div class="item">
+				<img src="{% static 'images/banner14.jpg' %}" alt="5 slide">
+	
+				<div class="container">
+					<div class="carousel-caption">
+						<h1>用户管理</h1>
+						<p>注册或登录账号，更有深度的参与小站活动。</p>
+						<p><a class="btn btn-lg btn-info hidden" href="{% url 'PersonalCenter' %}" target="_blank"
+							  role="button">点我进入</a></p>
+                        <h1></h1>
+                        <p>&nbsp;  </p>
+						<p>&nbsp;  </p>
+						<p>&nbsp;  </p>
+						<p>&nbsp;  </p>
+						<p>&nbsp;  </p>
+						<p>&nbsp;  </p>
+
+
+					</div>
+				</div>
+			</div>
+		</div>
+		<!--左右移动标签-->
+		<a class="left carousel-control" href="#ad-carousel" data-slide="prev"><span
+				class="glyphicon glyphicon-chevron-left"></span></a>
+		<a class="right carousel-control" href="#ad-carousel" data-slide="next"><span
+				class="glyphicon glyphicon-chevron-right"></span></a>
+	</div>
+					<!--轮播图结束-->
+					<!--新闻播报开始-->
+				<div class="articles">
+					<header>
+						<h3 class="title-head">新闻资讯</h3>
+					</header>
+					<div class="article">
+						<div class="article-left">
+							<a href="#"><img src="{% static 'images/article-4.jpg' %}"></a>
+						</div>
+						<div class="article-right">
+							<div class="article-title">
+                                <p>2019-3-11</p>
+{#								<p>2019-3-11<a class="span_link" href="{% url 'news:news_details' 6 %}"><span class="glyphicon glyphicon-comment"></span>0 </a><a class="span_link" href="#"><span class="glyphicon glyphicon-eye-open"></span>104 </a><a class="span_link" href="#">&nbsp;&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-star-empty"></span>52</a></p>#}
+								<a class="title" href="{% url 'news:news_details' 6 %} "> 2019年国土绿化确定七项重点任务</a>
+							</div>
+							<div class="article-text">
+								<p>全国绿化委员会、国家林业和草原局近日印发通知，部署从7个方面做好2019年国土绿化工作，确保全年完成1.01亿亩造林绿化任务。   这7个方面分别是：持续推进大规模国土绿化行动，加快林草植被修复；创新推进义务植树和部门绿化.....</p>
+
+								<div class="clearfix"></div>
+							</div>
+						</div>
+						<div class="clearfix"></div>
+					</div>
+					
+					<div class="article">
+						<div class="article-left">
+							<a href="#"><img src="{% static 'images/article-2.jpg' %}"></a>
+						</div>
+						<div class="article-right">
+							<div class="article-title">
+                                <p>2019-3-14</p>
+{#								<p>2019-3-14<a class="span_link" href="{% url 'news:news_details' 103 %}"><span class="glyphicon glyphicon-comment"></span>0 </a><a class="span_link" href="#"><span class="glyphicon glyphicon-eye-open"></span>104 </a><a class="span_link" href="#">&nbsp;&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-star-empty"></span></span>52</a></p>#}
+								<a class="title" href="{% url 'news:news_details' 103 %}"> 青岛女店主网销水果助果农致富</a>
+							</div>
+							<div class="article-text">
+								<p>走进座落在山东省青岛市的青岛盛华优选农业科技有限公司，李薇、朱剑明正和几位小伙正在拍摄销售西红柿、圣女果的视频广告，几个人忙着从策划到拍摄剪辑，然后再发布到微博、微信、抖音等平台上，以通过展示吸引消费者关注。这个公司的总经理叫王宁宁。正是靠着这种充满创意和活力的营销方式，王宁宁和她的百人团队2018年帮助云、贵、川等省山区果农销售水果2.8万吨 .....</p>
+
+								<div class="clearfix"></div>
+							</div>
+						</div>
+						<div class="clearfix"></div>
+					</div>
+					
+				</div>
+				<!--新闻播报结束-->
+
+				<!--分类1开始-->
+					<div class="sports-top">
+                        <div class="s-grid-left">
+                            <div class="cricket">
+                                <header>
+                                    <h3 class="title-head"><a style="color: #84754E" href="{% url 'news:news_list' 1 %}">国家政策</a></h3>
+                                </header>
+                                {% for gjzc in gjzz_news %}
+                                {% if forloop.first %}<div class="c-sports-main"><div class="c-image">
+                                {% else %}<div class="s-grid-small"><div class="sc-image">{% endif %}
+                                        <a href="{% url 'news:news_details' gjzc.newsid %}"><img src="/static/images/news_g{{ forloop.counter }}.jpg" alt="" /></a>
+                                    </div>
+                                {% if forloop.first %}<div class="c-text">{% else %}<div class="sc-text">{% endif %}
+                                        <h6>{{ gjzc.resource }}</h6>
+                                        <a class="power" href="{% url 'news:news_details' gjzc.newsid %}">{{ gjzc.title }}</a>
+                                        <p class="date">{{ gjzc.newsdate|date:'Y-m-d' }}</p>
+                                        <div class="clearfix"></div>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <div class="s-grid-right">
+                            <div class="cricket">
+									<header>
+                                        <h3 class="title-popular"><a style="color: #84754E" href="{% url 'news:news_list' 2 %}">行情解读</a></h3>
+									</header>
+									{% for hyzx in hyzx_news %}
+                                {% if forloop.first %}<div class="c-sports-main"><div class="c-image">
+                                {% else %}<div class="s-grid-small"><div class="sc-image">{% endif %}
+                                        <a href="{% url 'news:news_details' hyzx.newsid %}"><img src="/static/images/news_h{{ forloop.counter }}.jpg" alt="" /></a>
+                                    </div>
+                                {% if forloop.first %}<div class="c-text">{% else %}<div class="sc-text">{% endif %}
+                                        <h6>{{ hyzx.resource }}</h6>
+                                        <a class="power" href="{% url 'news:news_details' hyzx.newsid %}">{{ hyzx.title }}</a>
+                                        <p class="date">{{ hyzx.newsdate|date:'Y-m-d' }}</p>
+                                        <div class="clearfix"></div>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                </div>
+                                {% endfor %}
+									</div>
+								</div>
+								<div class="clearfix"></div>
+							</div>
+				<!--分类1结束-->
+				
+				
+				<!--分类2开始-->
+					<div class="sports-top">
+							<div class="s-grid-left">
+								<div class="cricket">
+									<header>
+                                        <h3 class="title-head"><a style="color: #84754E" href="{% url 'news:news_list' 3 %}">农业百科</a></h3>
+									</header>
+									{% for nybk in nybk_news %}
+                                {% if forloop.first %}<div class="c-sports-main"><div class="c-image">
+                                {% else %}<div class="s-grid-small"><div class="sc-image">{% endif %}
+                                        <a href="{% url 'news:news_details' nybk.newsid %}"><img src="/static/images/news_n{{ forloop.counter }}.jpg" alt="" /></a>
+                                    </div>
+                                {% if forloop.first %}<div class="c-text">{% else %}<div class="sc-text">{% endif %}
+                                        <h6>{{ nybk.resource }}</h6>
+                                        <a class="power" href="{% url 'news:news_details' nybk.newsid %}">{{ nybk.title }}</a>
+                                        <p class="date">{{ nybk.newsdate|date:"Y-m-d" }}</p>
+                                        <div class="clearfix"></div>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                </div>
+                                {% endfor %}
+									</div>
+								</div>
+							<div class="s-grid-right">
+								<div class="cricket">
+									<header>
+                                        <h3 class="title-popular"><a style="color: #84754E" href="{% url 'news:news_list' 4 %}">其他资讯</a></h3>
+									</header>
+									{% for qtzx in qtzx_news %}
+                                    {% if forloop.first %}<div class="c-sports-main"><div class="c-image">
+                                    {% else %}<div class="s-grid-small"><div class="sc-image">{% endif %}
+                                            <a href="{% url 'news:news_details' qtzx.newsid %}"><img src="/static/images/news_q{{ forloop.counter }}.jpg" alt="" /></a>
+                                        </div>
+                                    {% if forloop.first %}<div class="c-text">{% else %}<div class="sc-text">{% endif %}
+                                            <h6>{{ qtzx.resource }}</h6>
+                                            <a class="power" href="{% url 'news:news_details' qtzx.newsid %}">{{ qtzx.title }}</a>
+                                            <p class="date">{{ qtzx.newsdate|date:'Y-m-d' }}</p>
+                                            <div class="clearfix"></div>
+                                        </div>
+                                        <div class="clearfix"></div>
+                                    </div>
+                                    {% endfor %}
+									</div>
+								</div>
+								<div class="clearfix"></div>
+							</div>
+				<!--分类2结束-->
+				</div>
+	<!--右边部分开始-->			
+			<div class="col-md-4 side-bar">
+			<div class="first_half">
+				<div class="newsletter">
+					<h1 class="side-title-head">资讯检索</h1>
+					<p class="sign">输入您想检索的资讯关键词！</p>
+					<form id="search-form" method="post" action="{% url 'news:search_result' %}" autocomplete="off">
+						<input type="text" class="text" id="search_box" name="search_box" value="在这里输入" onFocus="this.value = '';" onBlur="if (this.value == '') {this.value = '在这里输入';}">
+						<input type="submit" value="查询">
+                        {% csrf_token %}
+					</form>
+				</div>
+				<!--垂直表单开始-->
+				<div class="list_vertical">
+		         	 	<section class="accordation_menu">
+						  <div>
+						    <input id="label-1" name="lida" type="radio" checked/>
+						   <label for="label-1" id="item1"><i class="ferme"> </i>热门新闻<i class="icon-plus-sign i-right1"></i><i class="icon-minus-sign i-right2"></i></label>
+						    <div class="content" id="a1">
+						    	<div class="scrollbar" id="style-2">
+								 <div class="force-overflow">
+									<div class="popular-post-grids">
+                                        {% for hnews in hot_news %}
+										<div class="popular-post-grid">
+											<div class="post-img">
+												<a href="#"><img src="/static/images/news_r{{ forloop.counter }}.jpg" alt="" /></a>
+											</div>
+											<div class="post-text">
+												<a class="pp-title" href="{% url 'news:news_details' hnews.newsid %}"> {{ hnews.title }}</a>
+                                                <p>{{ hnews.newsdate|date:'Y-m-d' }}</p>
+{#												<p>{{ hnews.newsdate|date:'Y-m-d' }} <a class="span_link" href="#"><span class="glyphicon glyphicon-comment"></span>3 </a><a class="span_link" href="#"><span class="glyphicon glyphicon-eye-open"></span>56 </a></p>#}
+											</div>
+											<div class="clearfix"></div>
+										</div>
+                                        {% endfor %}
+									</div>
+									</div>
+                                </div>
+                              </div>
+						  </div>
+						  <div>
+						    <input id="label-2" name="lida" type="radio"/>
+						    <label for="label-2" id="item2"><i class="icon-leaf" id="i2"></i>最新资讯<i class="icon-plus-sign i-right1"></i><i class="icon-minus-sign i-right2"></i></label>
+						    <div class="content" id="a2">
+						       <div class="scrollbar" id="style-2">
+								   <div class="force-overflow">
+									<div class="popular-post-grids">
+											{% for nnews in new_news %}
+										<div class="popular-post-grid">
+											<div class="post-img">
+												<a href="#"><img src="/static/images/news_z{{ forloop.counter }}.jpg" alt="" /></a>
+											</div>
+											<div class="post-text">
+												<a class="pp-title" href="{% url 'news:news_details' nnews.newsid %}"> {{ nnews.title }}</a>
+                                                <p>{{ nnews.newsdate|date:'Y-m-d' }}</p>
+{#												<p>{{ nnews.newsdate|date:'Y-m-d' }} <a class="span_link" href="#"><span class="glyphicon glyphicon-comment"></span>3 </a><a class="span_link" href="#"><span class="glyphicon glyphicon-eye-open"></span>56 </a></p>#}
+											</div>
+											<div class="clearfix"></div>
+										</div>
+                                        {% endfor %}
+										</div>
+									</div>
+								</div>
+						    </div>
+						  </div>
+						  <div>
+						    <input id="label-3" name="lida" type="radio"/>
+						    <label for="label-3" id="item3"><i class="icon-trophy" id="i3"></i>热门评论<i class="icon-plus-sign i-right1"></i><i class="icon-minus-sign i-right2"></i></label>
+						    <div class="content" id="a3">
+						       <div class="scrollbar" id="style-2">
+							    <div class="force-overflow">
+								 <div class="response">
+                                     {% for comment in hot_comments %}
+						<div class="media response-info">
+<!--							<div class="media-left response-text-left">
+								<a href="#">
+									<img class="media-object" src="images/icon1.png" alt="" />
+								</a>
+								<h5><a href="#">Username</a></h5>
+							</div>-->
+							<div class="media-body response-text-right">
+								<p>{{ comment.comment }}</p>
+								<ul>
+									<li>{{ comment.add_time }}</li>
+									<li><a href="{% url 'news:news_details' comment.news.newsid %}">查看</a></li>
+								</ul>
+							</div>
+							<div class="clearfix"> </div>
+						</div>
+                                     {% endfor %}
+							<div class="clearfix"> </div>
+						</div>
+					</div>
+					</div>
+
+                                </div>
+						</section>
+					 </div>
+					<!-- 垂直表单结束-->
+
+					 </div>
+					 <!--first_half结束-->
+					 <!--secound_half开始-->
+					 
+					 
+					 <div class="secound_half">
+					 
+					 <!--最新价格开始-->
+					 <div class="popular-news">
+						<header>
+							<h3 class="title-popular">价格播报</h3>
+						</header>
+						        <table class="table table-bordered table-hover">
+								  <tr class="success">
+									<th class="text-center">日期</th>
+									<th class="text-center">产品</th>
+									<th class="text-center">市场</th>
+									<th class="text-center">价格</th>
+								  </tr>
+                                    {% for item in price %}
+								  <tr>
+									<td>{{ item.date.date|date:"Y-m-d" }}</td>
+									<td>{{ item.marketproduct.product.productname }}</td>
+									<td>{{ item.marketproduct.market.marketname }}</td>
+									<td>{{ item.price }}元/公斤</td>
+								  </tr>
+                                    {% endfor %}
+
+								</table>
+
+					</div>
+					 
+					 
+					 <!--最新价格结束-->
+					 
+					 <!--标签开始-->
+					 <div class="tags">
+						<header>
+							<h3 class="title-head">热门标签</h3>
+						</header>
+						<p>
+                        {% for hot_label in hot_labels %}
+
+						<a class="tag{% if forloop.counter <= 20 %}{{ forloop.counter}}{% else %}{{ forloop.counter|add:-20}}{% endif %}" href="{% url 'news:hot_label' hot_label.term %}">{{ hot_label.term }}</a>
+                        {% endfor %}
+						</p>
+					 </div>
+					 <!--标签结束-->
+					</div>
+
+					<!--second_half结束-->
+					<div class="clearfix"></div>
+			</div>
+			<div class="clearfix"></div>
+		</div>
+	</div>
+    </div>
+
+{#    <script type="text/javascript">#}
+{#        var i = 1;#}
+{#        $('img').attr("src",this.attr('src').split('.')[0]+i+'.'+this.attr('src').split('.')[1]);#}
+{#    </script>#}
+  {% endblock %}

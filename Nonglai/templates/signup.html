@@ -1,0 +1,170 @@
+{#<!DOCTYPE html>#}
+{% load staticfiles %}
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+	<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>Minimal and Clean Sign up / Login and Forgot Form by FreeHTML5.co</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="Free HTML5 Template by FreeHTML5.co" />
+	<meta name="keywords" content="free html5, free template, free bootstrap, html5, css3, mobile first, responsive" />
+	
+
+  
+
+  	<!-- Facebook and Twitter integration -->
+	<meta property="og:title" content=""/>
+	<meta property="og:image" content=""/>
+	<meta property="og:url" content=""/>
+	<meta property="og:site_name" content=""/>
+	<meta property="og:description" content=""/>
+	<meta name="twitter:title" content="" />
+	<meta name="twitter:image" content="" />
+	<meta name="twitter:url" content="" />
+	<meta name="twitter:card" content="" />
+
+	<!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+	<link rel="shortcut icon" href="favicon.ico">
+
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700,300' rel='stylesheet' type='text/css'>
+	
+	<link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+	<link rel="stylesheet" href="{% static 'css/animate.css' %}">
+	<link rel="stylesheet" href="{% static 'css/style_login.css' %}">
+	<link href="{% static 'css/style.css' %}" rel="stylesheet" type="text/css" media="all">
+	<link href="{% static 'css/main.css' %}" rel="stylesheet" type="text/css"/>
+	<link href="{% static 'css/style_login.css' %}" rel="stylesheet" type="text/css"/>
+
+	<!-- Modernizr JS -->
+	<script src="{% static 'js/modernizr-2.6.2.min.js' %}"></script>
+	<!-- FOR IE9 below -->
+	<!--[if lt IE 9]>
+	<script src="js/respond.min.js"></script>
+	<![endif]-->
+
+	</head>
+	<body>
+	<!-- jQuery -->
+	<script src="{% static 'js/jquery.min.js' %}"></script>
+    <script src="{% static 'js/jquery-1.11.1.js' %}"></script>
+    <script src="{% static 'js/jquery-1.11.1.min.js' %}"></script>
+	<!-- Bootstrap -->
+	<script src="{% static 'js/bootstrap.min.js' %}"></script>
+	<!-- Placeholder -->
+	<script src="{% static 'js/jquery.placeholder.min.js' %}"></script>
+	<!-- Waypoints -->
+	<script src="{% static 'js/jquery.waypoints.min.js' %}"></script>
+	<!-- Main JS -->
+	<script src="{% static 'js/main.js' %}"></script>
+
+    <script src="{% static 'layer/layer.js' %}"></script>
+    <div style="width: 350px; display: none" id="login_page" align="center">
+            <div class="" style="margin-top:70px">
+{#                <form action="{% url 'login' %}" method="post" autocomplete="off">#}
+                    <h2>登录</h2>
+                    <p>  &nbsp;  </p>
+                    <div class="form-group">
+                        <label for="username" class="sr-only" >用户名</label>
+                        <input type="text" class="form-control" name="username" id="username" placeholder="用户名" autocomplete="off" style="width: 200px">
+                    </div>
+                    <div class="form-group">
+                        <label for="password" class="sr-only">密码</label>
+                        <input type="password" class="form-control" name="password" id="password" placeholder="密码" autocomplete="off" style="width: 200px">
+                    </div>
+                    <div class="form-group">
+                        <p>未注册？ <a href="{% url 'register' %}">点此注册</a> </p>
+                    </div>
+                    <label id="msg"></label>
+                    <div class="form-group">
+                        <input id="btn_login" type="submit" value="登录" onclick="login_submit()" class="btn btn-primary" style="height: 30px;">
+                    </div>
+                    <script type="text/javascript">
+                        function login_submit() {
+                            $.ajax({
+                                cache:false,
+                                type:"POST",
+                                url:"{% url 'login' %}",
+                                data:{
+                                    'username':$("#username").val(),
+                                    'password':$("#password").val()
+                                },
+                                async:true,
+                                beforeSend:function (xhr,settings) {
+                                    xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}")
+                                },
+                                success:function (data) {
+                                    if(data.status == 'success'){
+                                        parent.window.location.reload();
+                                    }
+                                    else {
+                                        $("#msg").text(data.msg);
+                                    }
+                                }
+                            })
+                        }
+                    </script>
+{#                    {% csrf_token %}#}
+{#                    </form>#}
+                </div>
+			<div class="row" style="padding-top: 60px; clear: both;"></div>
+		</div>
+		<div>
+            <!-- Start Sign In Form -->
+            <form action="{% url 'register' %}" method="post" class="fh5co-form animate-box" data-animate-effect="fadeInRight">
+                <h2>注册</h2>
+                <div class="form-group">
+                    <label for="name" class="sr-only">用户名</label>
+                    <input type="text" class="form-control" id="uname" name="username" placeholder="用户名" autocomplete="off">
+                </div>
+                <div class="form-group">
+                    <label for="password" class="sr-only">密码</label>
+                    <input type="password" class="form-control" id="password1" name="password1" placeholder="密码" autocomplete="off">
+                </div>
+                <div class="form-group">
+                    <label for="re-password" class="sr-only">再次输入密码</label>
+                    <input type="password" class="form-control" id="password2" name="password2" placeholder="再次输入密码" autocomplete="off">
+                </div>
+                <div class="form-group">
+                    <div class="form-group marb8 captcha1"><label>验证码：</label>{{ register_form.checkword }}</div>
+                </div>
+{#                <div class="form-group">#}
+{#                    <label for="email" class="sr-only">邮箱</label>#}
+{#                    <input type="email" class="form-control" id="email" name="email" placeholder="邮箱" autocomplete="off">#}
+{#                </div>#}
+                <div class="form-group">
+                    <p>您已经注册？<a onclick="parent_login()">点击登录</a></p>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="注册" class="btn btn-primary">
+{#                    <div style="float: right;padding-right: 100px" align="center">{{ msg }}</div>#}
+                </div>
+                {% csrf_token %}
+            </form>
+            <!-- END Sign In Form -->
+        </div>
+        <script type="text/javascript">
+            function parent_login() {
+                parent.$("#btn_login").click();
+                layer.open({
+                    type: 1,
+                    title: false,
+                    scrollbar: false,
+                    shadeClose:true,
+                    content: $('#login_page'),
+                    area: ['365px','396px'],
+                    resize: false
+                });
+            }
+            {% if msg %}
+                alert('{{ msg }}');
+            {% endif %}
+            {% if register_success %}
+                parent.layer.closeAll();
+            {% endif %}
+        </script>
+	</body>
+</html>
+

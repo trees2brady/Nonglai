@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block content %}
+<link href="{% static 'css/style.css' %}" rel="stylesheet" type="text/css" media="all">
+
+<!-- Start of Search Wrapper -->
+<div class="search-area-wrapper">
+  <div class="search-area container">
+    <h1>&nbsp;</h1>
+    <h3 class="search-header">农业资讯</h3>
+    <h6>&nbsp;</h6>
+    <p class="search-tag-line">输入关键词，便捷获取您需要的信息。</p>
+    <form id="search-form" class="search-form clearfix" method="post" action="{% url 'news:search_result' %}" autocomplete="off">
+      <input class="search-term required" type="text" id="search_box" name="search_box" placeholder="在这里输入关键词" title="* Please enter a search term!" />
+      <input class="search-btn" type="submit" value="搜索" />
+      <div id="search-error-container"></div>
+        {% csrf_token %}
+    </form>
+  </div>
+</div>
+<!-- End of Search Wrapper -->
+<!--新闻分类开始-->
+    <div class="btn-group btn-group-justified"> <a class="btn btn-default" href="{% url 'news:news_list' 0 %}">综合</a>
+    <a class="btn btn-default" href="{% url 'news:news_list' 1 %}">国家政策</a>
+    <a class="btn btn-default" href="{% url 'news:news_list' 2 %}">行情解读</a>
+    <a class="btn btn-default" href="{% url 'news:news_list' 3 %}">农业百科</a>
+    <a class="btn btn-default" href="{% url 'news:news_list' 4 %}">其他</a>
+    </div>
+    <!--新闻分类结束-->
+{% block news %}{% endblock %}
+{% endblock %}

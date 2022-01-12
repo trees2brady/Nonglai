@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="{% static 'js/jquery-1.11.1.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <title>农莱-注册</title>
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'css/style.css' %}" rel="stylesheet" type="text/css" media="all">
+    <link href="{% static 'css/main.css' %}" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<form action="{% url 'register' %}" method="post" autocomplete="off">
+    <ul>
+        <li><label>用户名：</label><input type="text" name="username"></li>
+{#        <li><label>E-mail：</label><input type="text" name="email"></li>#}
+        <li><label>密   码：</label><input type="password" name="password"></li>
+        <li><div class="form-group marb8 captcha1"><label>验证码：</label>{{ register_form.checkword }}</div></li>
+        <li><div class="error btns">{% for error in register_form.errors.items %}{{ error }}{% endfor %}{{ msg }}</div></li>
+    </ul>
+    <input type="submit" value="注册">
+    {% csrf_token %}
+</form>
+</body>
+</html>

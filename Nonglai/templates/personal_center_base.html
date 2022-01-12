@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block content %}
+<div class="personal-area-wrapper">
+    <div class="search-area container">
+        <h1>&nbsp;</h1>
+		<h6>&nbsp;</h6>
+		<h6>&nbsp;</h6>
+
+        <h3 class="search-header">个人中心</h3>
+
+    </div>
+</div>
+<!-- 头部框结束-->
+<!--面包屑导航开始-->
+<ol class="breadcrumb">
+    <li><a href="#">个人中心</a></li>
+    <li class="active">个人信息</li>
+</ol>
+<!--面包屑导航结束-->
+<!--个人中心开始-->
+<div class="main_personal">
+<div class="row">
+    <!--左边部分开始-->
+    <div class="col-md-3">
+    <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+        <div class="personal-nav-wrapper">
+            <ul class="nav nav-pills nav-stacked">
+                <li role="presentation"><a href="{% url 'PersonalCenter' %}"><i class="glyphicon glyphicon-home"></i>&nbsp;个人信息</a></li>
+                <li role="presentation"><a href="{% url 'collection' %}"><i class="glyphicon glyphicon-star"></i>&nbsp;我的收藏</a>
+                </li>
+                <li role="presentation"><a href="{% url 'comments' %}"><i class="glyphicon glyphicon-edit"></i>&nbsp;我的评论</a>
+                </li>
+{#                <li role="presentation"><a href="#"><i class="glyphicon glyphicon-bullhorn"></i>&nbsp;我的消息<span class="badge"></span></a></li>#}
+            </ul>
+        </div>
+    </div>
+{% block pc_content %}{% endblock %}
+</div>
+</div>
+<!--个人中心结束-->
+{% endblock %}

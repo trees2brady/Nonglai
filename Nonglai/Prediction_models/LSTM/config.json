@@ -1,0 +1,56 @@
+{
+	"data": {
+		"filename": "train_model.csv",
+		"columns": [
+			"year",
+			"month",
+			"monthday",
+			"weekday",
+			"price"
+		],
+		"sequence_length": 10,
+		"train_test_split": 0.83,
+		"normalise": true
+	},
+	"training": {
+		"epochs": 6,
+		"batch_size": 64
+	},
+	"model": {
+		"loss": "mse",
+		"optimizer": "adam",
+		"save_dir": "saved_models",
+		"layers": [
+			{
+				"type": "lstm",
+				"neurons": 100,
+				"input_timesteps": 9,
+				"input_dim": 5,
+				"return_seq": true
+			},
+			{
+				"type": "dropout",
+				"rate": 0.2
+			},
+			{
+				"type": "lstm",
+				"neurons": 100,
+				"return_seq": true
+			},
+			{
+				"type": "lstm",
+				"neurons": 100,
+				"return_seq": false
+			},
+			{
+				"type": "dropout",
+				"rate": 0.2
+			},
+			{
+				"type": "dense",
+				"neurons": 1,
+				"activation": "linear"
+			}
+		]
+	}
+}

@@ -1,0 +1,60 @@
+{% extends 'base_news.html' %}
+{% load staticfiles %}
+{% block news %}
+
+<!--面包屑导航开始-->
+<ol class="breadcrumb">
+  <li><a>农业资讯</a></li>
+  <li><a>搜索结果</a></li>
+  <li class="active">关键词：{{ search_str }}</li>
+</ol>
+<!--面包屑导航结束-->
+<!--新闻开始-->
+<div class="row">
+  <!--左端新闻展示页开始-->
+  <div class="col-md-8">
+    <div class="wrap-newslist-left">
+      <ul class="list-group">
+          {% for news in newslist %}
+        <li class="list-group-item">
+          <div class="newslist-container">
+            <h1 class="newstitle"><a href="{% url 'news:news_details' news.newsid %}" target="_blank">{{ news.title }}</a></h1>
+              <h5 class="pTxt">{{ news.newscontent|truncatechars:200 }}</h5>
+              <h5 class="clearfix pInfo mt15 text-right" > 【{{ news.newstag }}】 <i>{{ news.newsdate|date:'Y-n-d' }}</i> </h5>
+          </div>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+  <!--左端新闻展示页结束-->
+  <!--右栏开始-->
+  <div class="col-md-4">
+    <div class="wrap-newslist-right">
+      <h4><span class="label label-danger">热门推荐</span></h4>
+      <div class="con">
+        <ul class="cgList">
+          {% for hnews in hotnews %}
+          <li> <a target="_blank" href="{% url 'news:news_details' hnews.newsid %}">{{ hnews.title }}</a> </li>
+            {% endfor %}
+        </ul>
+      </div>
+    </div>
+      <!-- 猜你喜欢荐栏目开始-->
+    <div class="wrap-newslist-right">
+      <h4><span class="label label-warning">猜你喜欢</span></h4>
+      <div class="con">
+        <ul class="cgList">
+            {% for rnews in randnews %}
+          <li> <a target="_blank" href="{% url 'news:news_details' rnews.newsid %}">{{ rnews.title }}</a> </li>
+            {% endfor %}
+        </ul>
+      </div>
+    </div>
+ <!-- 猜你喜欢荐栏目结束-->
+  </div>
+  <!--右栏结束-->
+</div>
+<!--新闻结束-->
+
+{% endblock %}

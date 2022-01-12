@@ -1,0 +1,46 @@
+﻿{% extends 'personal_center_base.html' %}
+{% load staticfiles %}
+{% block pc_content %}
+  <!--右边部分开始-->
+  <div class="col-md-9">
+     <!--panel开始--> 
+  <div class="panel panel-success">
+  <div class="panel-heading">
+    <h3 class="panel-title">我的收藏</h3>
+  </div>
+  <div class="panel-body">
+    <div class="personal-right-wrapper">
+      <ul class="nav nav-tabs">
+        <li role="presentation" class="active"><a href="#">农业资讯</a></li>
+{#        <li role="presentation"><a href="{% url 'favpro' %}">农产品</a></li>#}
+      </ul>
+      <div class="my-short-total news_short">您共收藏了<em class="news_short_num">{{ fav_news_count }}</em>条新闻资讯</div>
+	  <ul class="list-group">
+	  <!--第一条收藏新闻开始-->
+      <form id="form1" method="post" action="{% url 'collection' %}" autocomplete="off">
+          {% for news in fav_news_list %}
+  <li class="list-group-item"><a hidefocus="true" href="{% url 'news:news_details' news.news.newsid %}" target="_blank">{{ news.news.title }}</a>
+          <div class="np-post-footer"> <span class="coral-r font14">
+            <a class="np-btn-delete delete" name="{{ news.id }}" onclick="delete_favnews(this)"> <i class="glyphicon glyphicon-trash"></i>删除 </a> </span> <span class="font14"> {{ news.addtime }} &nbsp;&nbsp;&nbsp;&nbsp; </span> </div>
+  </li>
+          {% endfor %}
+      <input id="deleted_favnewsid" name="deleted_favnewsid" type="hidden">
+        <script type="text/javascript">
+            function delete_favnews(e) {
+                var favnewsid = $(e).attr("name");
+                $("#deleted_favnewsid").val(favnewsid);
+                var x = $("#deleted_favnewsid").val();
+                document.getElementById("form1").submit();
+            }
+        </script>
+      {% csrf_token %}
+      </form>
+    <!--第一条收藏新闻结束-->
+</ul>
+    </div>
+  </div>
+<!--右边部分结束-->
+
+  </div>
+</div>
+{% endblock %}

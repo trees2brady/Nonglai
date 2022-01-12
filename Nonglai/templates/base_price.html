@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block custom_css %}
+     <link href="{% static 'css/style.css' %}" rel="stylesheet" type="text/css" media="all">
+     <link href="{% static 'css/bootstrap-datetimepicker.min.css' %}" rel="stylesheet" type="text/css" media="all">
+{% endblock %}
+{% block custom_js %}
+    <script src="{% static 'js/calendar.js' %}"></script>
+    <script src="{% static 'js/echarts.js' %}"></script>
+{% endblock %}
+{% block content %}
+<!-- 题目开始 -->
+
+
+<div class="price-area-wrapper" >
+  <div class="search-area container">
+    <h1>&nbsp;</h1>
+    <h1>&nbsp;</h1>
+    <h1>&nbsp;</h1>
+    <h3 class="search-header">价格行情</h3>
+  </div>
+</div>
+<!-- End of Price Wrapper -->
+<!--题目结束-->
+<div class="btn-group btn-group-justified">
+    <a class="btn btn-default" href="{% url 'products:price_inquiry'  %}"{% block jg1 %}{% endblock %}>价格查询</a>
+    <a class="btn btn-default " href="{% url 'products:price_analysis1' %}"{% block jg2 %}{% endblock %}>价格分析</a>
+    <a class="btn btn-default " href="{% url 'products:price_predict'%}"{% block jg3 %}{% endblock %}>价格预测</a> </div>
+<!--价格行情导航栏结束-->
+<!--面包屑导航开始-->
+<ol class="breadcrumb">
+  <li><a href="#">价格行情</a></li>
+  <li class="active">{% block type %}{% endblock %}</li>
+</ol>
+<!--面包屑导航结束-->
+{% block price %}
+{% endblock %}
+
+{% endblock %}
+
+
+
+{% block js %}
+<script src="{% static 'js/bootstrap-datetimepicker.min.js' %}"></script>
+<script src="{% static 'js/bootstrap-datetimepicker.zh-CN.js' %}"></script>
+<script type="text/javascript">
+    $(".date").datetimepicker({//选择年月日
+        format: 'yyyy-mm-dd',
+        language: 'zh-CN',
+        weekStart: 1,
+        todayBtn: 1,//显示‘今日’按钮
+        autoclose: 1,
+        todayHighlight: 1,
+        startView: 2,
+        minView: 2,  //Number, String. 默认值：0, 'hour'，日期时间选择器所能够提供的最精确的时间选择视图。
+        clearBtn: true,//清除按钮
+        forceParse: 0
+    });
+    $('.date').focus(function () {
+        $(this).blur();//不可输入状态
+    });
+</script>
+{% endblock %}

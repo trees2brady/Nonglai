@@ -1,0 +1,283 @@
+{% extends 'base_news.html' %}
+{% load staticfiles %}
+{% block news %}
+
+<!--面包屑导航开始-->
+<ol class="breadcrumb">
+  <li><a href="#">农业资讯</a></li>
+  <li><a href="#">综合</a></li>
+  <li class="active">信息</li>
+</ol>
+<!--面包屑导航结束-->
+<!--新闻开始-->
+<div class="row">
+  <!--左端新闻详细开始-->
+  <div class="col-md-8">
+    <div class="wrap-newsdetails-left">
+      <div class="con">
+		 <h2 class="artTitle" id="show_title">{{ newsdetails.title }}</h2>
+		 <p class="artInfo" id="show_time">{{ newsdetails.newsdate }} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;信息来源：农业农村部市场与信息化司</p>
+		 <br/>
+		 <p>  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ newsdetails.newscontent|linebreaksbr }}</p>
+	 </div>
+    </div>
+    <!--收藏评论区开始-->
+      <div class="wrap-newsdetails-left" style="text-align: center">
+        <button {% if not has_fav %}style="display: none"{% endif %} type="button" class="btn btn-danger my_fav_btn" onclick="checkuser(this)"> <span class="glyphicon glyphicon-star-empty" aria-hidden="true"></span> &nbsp;已收藏 </button>
+        <button {% if has_fav %}style="display: none"{% endif %} type="button" class="btn btn-danger my_fav_btn" onclick="checkuser(this)"> <span class="glyphicon glyphicon-star-empty" aria-hidden="true"></span> &nbsp;收&nbsp;藏 </button>
+
+<!--	<button type="button" class="btn btn-danger active">
+<span class="glyphicon glyphicon-star" aria-hidden="true"></span>已收藏
+</button>--></div>
+
+
+      <!--评论区-->
+    <div style="padding-left: 40px;">
+{#                <div class="wgt-ipt-wrap pub-editor-wrap " id="js-pl-input-fake">#}
+{#                    <textarea id="js-pl-textarea" class="" placeholder="扯淡、吐槽、表扬、鼓励……想说啥就说啥！" ></textarea>#}
+{#                </div>#}
+
+        <div class="comment-list">
+          <div id="comment-place">
+            <div class="comment-post" id="comment-post">
+              <h3><i class="glyphicon glyphicon-pencil"></i>评论</h3>
+              <div class="cancel-reply" id="cancel-reply" style="display: none;margin-top: 10px"> <a href="javascript:void(0);" onClick="$.comment.cancelReply(this)"><i class="glyphicon glyphicon-share-alt"></i>取消回复</a> </div>
+{#              <form class="form-horizontal" role="form" id="comment-form">#}
+{#                <input type="hidden" name="pid" id="comment-pid" value="0" size="22" tabindex="1">#}
+{#                <div id="editor" style="width: 100%;height: 150px;">#}
+{#                  <p>在这里，畅所欲言！</p>#}
+{#                    #}
+{#                </div>#}
+{#                <div class=" btn-center"><a id="comment-form-btn" type="button" data-loading-text="正在提交评论..." class="btn btn-info">提交评论</a></div>#}
+{#              </form>#}
+                <textarea id="js-pl-textarea" style="width: 100%" placeholder="扯淡、吐槽、表扬、鼓励……想说啥就说啥！" rows="8" ></textarea>
+                <input type="button" id="js-pl-submit" class="btn btn-primary" data-cid="452" value="发表评论" style="float: right;margin-top:20px;margin-bottom: 20px;">
+            </div>
+          </div></div>
+
+
+        <div class="commentList" style="margin-top: 100px">
+            <h3><i class="glyphicon glyphicon-comment"></i><em>{{ commentscount }}</em>条评论</h3>
+            <ul class="comment">
+            {% for comment in newscomments %}
+              <li>
+                <div class="comment-body" id="comment-1">
+                  <div class="cheader"> <a target="_blank" href="https://github.com/zhangyd-c"> <span class="glyphicon glyphicon-user"></span> <strong>{{ comment.user.username }}</strong> </a>
+                    <div class="timer"> <i class="glyphicon glyphicon-time"></i> {{ comment.add_time }} </div>
+                  </div>
+                  <div class="content">
+                        {% if comment.towards %}
+                      <a href="#comment" class="comment-quote">@{{ comment.towards.user.username }}</a>
+                        {% endif %}
+                      {{ comment.comment }}
+                  </div>
+                  <div class="sign"> <a href="#comment-{{ comment.towards }}" name="{{ comment.id }}" class="comment-reply" onClick="reply_click(this)"><i class="glyphicon glyphicon-share-alt"></i>回复</a> </div>
+                </div>
+              </li>
+            {% endfor %}
+            </ul></div>
+
+{#        <ul>#}
+{#            {% for comment in newscomments %}#}
+{#            <li>#}
+{#                <label><span target="_blank">{{ comment.user.username }}</span></label>#}
+{#                <p>{{ comment.comment }}</p>#}
+{#                <div class="footer clearfix">#}
+{#                    <span title="创建时间" class="l timeago">时间：{{ comment.add_time }}</span>#}
+{#                </div>#}
+{#            </li>#}
+{#            {% endfor %}#}
+{#        </ul>#}
+    </div>
+    </div>
+  <!--左端新闻详细结束-->
+
+  <!--右栏开始-->
+  <div class="col-md-4">
+    <div class="wrap-newslist-right" style="margin-top: 200px">
+      <h4><span class="label label-info">相关推荐</span></h4>
+      <div class="con">
+        <ul class="cgList">
+            {% for nnews  in nearestnews %}
+          <li> <a target="_blank" href="{% url 'news:news_details' nnews.newsid %}">{{ nnews.title }}</a> </li>
+            {% endfor %}
+        </ul>
+      </div>
+    </div>
+    <p></p>
+      <!--看过此资讯的人还看栏目开始-->
+  {% if user_like_news %}
+    <div class="wrap-newslist-right">
+      <h4><span class="label label-success">关注此资讯的人还看</span></h4>
+      <div class="con">
+        <ul class="cgList">
+            {% for lnews  in user_like_news %}
+          <li> <a target="_blank" href="{% url 'news:news_details' lnews.newsid %}">{{ lnews.title }}</a> </li>
+            {% endfor %}
+        </ul>
+      </div>
+    </div>
+  {% endif %}
+    <!--看过此资讯的人还看还看栏目结束-->
+  </div>
+
+  <!--右栏结束-->
+</div>
+    <input type="hidden" id="is_reply">
+<!--新闻结束-->
+{#<script type="text/javascript" src="{% static 'js/plugins/jquery.raty.js' %}"></script>#}
+<script type="text/javascript">
+function checkuser(e) {
+    {% if request.user.is_authenticated %}
+        $.ajax({
+            cache:false,
+            type:"POST",
+            url:"{% url 'news:my_fav_news' %}",
+            data:{'newsid':{{ newsdetails.newsid }} },
+            async:true,
+            beforeSend:function (xhr,settings) {
+                xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}")
+            },
+            success:function (data) {
+                if(data.status == 'success'){
+                        $(".my_fav_btn").toggle();
+                        console.log("changed")
+                    }
+                }
+            });
+    {% else %}
+        alert("请先登录！");
+    {% endif %}
+{#    if($("#loginbtn").length>0){#}
+{#        alert("请先登录！");#}
+{#    }#}
+{#    else{#}
+{#        $.ajax({#}
+{#            cache:false,#}
+{#            type:"POST",#}
+{#            url:"{% url 'news:my_fav_news' %}",#}
+{#            data:{'newsid':{{ newsdetails.newsid }} },#}
+{#            async:true,#}
+{#            beforeSend:function (xhr,settings) {#}
+{#                xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}")#}
+{#            },#}
+{#            success:function (data) {#}
+{#                if(data.status == 'success'){#}
+{#                        $(".my_fav_btn").toggle();#}
+{#                        console.log("changed")#}
+{#                    }#}
+{#                }#}
+{#            })#}
+{#    }#}
+}
+//添加评论
+$('#js-pl-submit').on('click', function(){
+    {% if request.user.is_authenticated %}
+    var comments = $("#js-pl-textarea").val();
+    var replay = aherf;
+    if(comments == ""){
+        alert("评论不能为空");
+        return
+    }
+    $.ajax({
+        cache: false,
+        type: "POST",
+        url:"{% url 'news:add_comment' %}",
+        data:{
+            'newsid':{{ newsdetails.newsid }},
+            'comments':comments,
+            'reply':replay
+        },
+        async: true,
+        beforeSend:function(xhr, settings){
+            xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
+        },
+        success: function(data) {
+            if(data.status == 'fail'){
+{#                if(data.msg == '用户未登录'){#}
+{#                    window.location.href="/login/";#}
+{#                }else{#}
+                    alert(data.msg);
+{#                }#}
+
+            }else if(data.status == 'success'){
+                window.location.reload();//刷新当前页面.
+            }
+        },
+    });
+    {% else %}
+        alert("请先登录！");
+    {% endif %}
+});
+		var E = window.wangEditor;
+		var editor = new E('#editor');
+		// 自定义菜单配置
+		editor.customConfig.menus = [
+			'code', // 插入代码
+			//			'head', // 标题
+			'bold', // 粗体
+			'italic', // 斜体
+			'underline', // 下划线
+			//			'strikeThrough', // 删除线
+			//			'foreColor', // 文字颜色
+			//			'backColor', // 背景颜色
+			'image', // 插入图片
+			'link', // 插入链接
+			'list', // 列表
+			//			'justify', // 对齐方式
+			'quote', // 引用
+			'emoticon' // 表情
+			//			'table', // 表格
+			//			'video', // 插入视频
+			//			'undo', // 撤销
+			//			'redo' // 重复
+		];
+		// debug模式下，有 JS 错误会以throw Error方式提示出来
+		editor.customConfig.debug = true;
+
+		// 关闭粘贴样式的过滤
+		editor.customConfig.pasteFilterStyle = false;
+		// 自定义处理粘贴的文本内容
+		editor.customConfig.pasteTextHandle = function(content) {
+			// content 即粘贴过来的内容（html 或 纯文本），可进行自定义处理然后返回
+			return content + '<p>在粘贴内容后面追加一行</p>'
+		};
+		// 插入网络图片的回调
+		editor.customConfig.linkImgCallback = function(url) {
+			console.log(url) // url 即插入图片的地址
+		};
+		editor.customConfig.zIndex = 100;
+		editor.create();
+		E.fullscreen.init('#editor');
+		//		editor.txt.clear(); //清空编辑器内容
+		//		editor.txt.html('<p>用 JS 设置的内容</p><strong>hello</strong><script>alert(/xss/);<\/script>');
+		//		editor.txt.append('<p>追加的内容</p>');
+		// 读取 html
+		console.log(editor.txt.html());
+		// 读取 进行 xss 攻击过滤后的html
+{#		console.log(filterXSS(editor.txt.html()));#}
+		// 读取 text
+		console.log(editor.txt.text());
+		// 获取 JSON 格式的内容
+		console.log(editor.txt.getJSON());
+{#function scrollLis(){#}
+{# var toTop = offs.top-$(window).scrollTop();#}
+{# if(toTop==0||toTop<0){#}
+{#  if(!$('#fixed').hasClass('ab'))$('#fixed').addClass('ab');#}
+{# }else{#}
+{#  $('#fixed').removeClass('ab');#}
+{# }#}
+{# }#}
+{#var offs=$('#fixed').offset();#}
+{#$(window).scroll(function(){#}
+{# scrollLis();#}
+{# });#}
+        var aherf
+        function  reply_click(e) {
+            $.comment.reply(1, e);
+            var inp = $("#is_reply");
+            aherf = e.name;
+            $("#is_reply").val(e.name);
+        }
+</script>
+{% endblock %}

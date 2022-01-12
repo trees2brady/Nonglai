@@ -1,0 +1,51 @@
+﻿{% extends 'personal_center_base.html' %}
+{% load staticfiles %}
+{% block pc_content %}
+<!--右边部分开始-->
+<div class="col-md-9">
+   <!--panel开始--> 
+  <div class="panel panel-success">
+  <div class="panel-heading">
+    <h3 class="panel-title">我的评论</h3>
+  </div>
+  <div class="panel-body">
+  <div class="personal-right-wrapper">
+    <!--<ul class="nav nav-tabs">
+  <li role="presentation" class="active"><a href="#">基本资料</a></li>
+</ul>-->
+    <div class="my-short-total news_short">您共有<em class="news_short_num">{{ comments_count }}</em>条评论</div>
+    <ul class="list-group">
+    <form id="form1" method="post" action="{% url 'comments' %}" autocomplete="off">
+        {% for comments in comments_list %}
+      <li class="list-group-item">
+        <!--第一条评论开始-->
+        <div class="comment-show-wrapper"> {{ comments.comment }}
+          <div class="quote_news_title">
+            <p> 来自<a hidefocus="true" href="{% url 'news:news_details' comments.news.newsid %}" target="_blank">{{ comments.news.title }}</a> </p>
+          </div>
+          <div class="np-post-footer"> <span class="coral-r font14">
+{#            <div class="np-btn-reply reply"> <i class="glyphicon glyphicon-share"></i>回复(<em>0</em>) </div>#}
+            <a class="np-btn-delete delete" onclick="delete_comment(this)" name="{{ comments.id }}"> <i class="glyphicon glyphicon-trash"></i>删除 </a> </span> <span class="font14"> {{ comments.add_time }} &nbsp;&nbsp;&nbsp;&nbsp;
+			</span> </div>
+        </div>
+        <!--第一条评论结束-->
+      </li>
+        {% endfor %}
+    <input id="deleted_commentid" name="deleted_commentid" type="hidden">
+        <script type="text/javascript">
+            function delete_comment(e) {
+                var favnewsid = $(e).attr("name");
+                $("#deleted_commentid").val(favnewsid);
+                document.getElementById("form1").submit();
+            }
+        </script>
+      {% csrf_token %}
+      </form>
+
+    </ul>
+  </div>
+  
+  <!--右边部分结束-->
+    </div>
+</div>
+{% endblock %}

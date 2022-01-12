@@ -1,0 +1,406 @@
+﻿{% extends 'base_price.html' %}
+{% load staticfiles %}
+{% block jg2 %}style="background-color:#d0e9c6"{% endblock %}
+{% block type %}价格分析：同一市场的不同产品{% endblock %}
+{% block price %}
+<!--主体部分开始-->
+<div class="main_price">
+  <div class="row">
+    <!--左栏开始-->
+    <div class="col-md-4">
+      <div class="form-left-wrap">
+        <div class="form-main">
+          <div id="legend" class="form-title">
+            <legend class="">价格分析</legend>
+          </div>
+          <!--选择分析类型开始-->
+         <div class="type">
+            <div>选择分析类型：</div>
+             <button type="button" class="btn btn-default navbar-btn"><a href="{% url 'products:price_analysis1' %}">&nbsp;&nbsp;同一产品价格走势&nbsp;</a></button>&nbsp;&nbsp;&nbsp;&nbsp;
+             <button type="button" class="btn btn-default navbar-btn"><a href="{% url 'products:price_analysis2' %}">同一产品在不同年份</a></button>
+             <button type="button" class="btn btn-default navbar-btn"><a href="{% url 'products:price_analysis3' %}">同一产品在不同市场</a></button>&nbsp;&nbsp;&nbsp;&nbsp;
+             <button type="button" class="btn btn-default navbar-btn active"><a href="{% url 'products:price_analysis4' %}">同一市场的不同产品</a></button>
+          </div>
+          <!--选择分析类型结束-->
+
+		  <div style="padding-top: 10px">
+          <form class="form-horizontal" action="{% url 'products:price_analysis4' %}" method="post" autocomplete="off" id="form1" name="form1" onSubmit="return checkSEDate2();">
+              {% csrf_token %}
+
+            <div class="form-group">
+              <label for="inputPassword3" class="col-sm-3 control-label">地区</label>
+              <div class="col-sm-6">
+                <select  class="input-sm form-control" style="padding-top: 1px; padding-bottom: 1px" onchange="ajax_load_market(this)" name="province" id="province_select">
+                  <option value="">请选择</option>
+                  {% for province in provinces %} <option value="{{ province.provinceid }}">{{ province.provincename }}</option>{% endfor %}
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="inputPassword3" class="col-sm-3 control-label">市场</label>
+              <div class="col-sm-6">
+                  <select class="input-sm form-control" style="padding-top: 1px; padding-bottom: 1px" id="all_markets" name="market">
+                    <option value="">请选择</option>
+                      {% for market in markets %} <option value="{{ market.marketid }}">{{ market.marketname }}</option>{% endfor %}
+                  </select>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="col-sm-3 control-label">产品种类1</label>
+              <div class="col-sm-6">
+              <select class="input-sm form-control" onchange="ajax_load_product1()" name="category1" id="category_select1">
+                <option value="">请选择</option>
+                 {% for category in categories %} <option value="{{ category.categoryid }}">{{ category.categoryname }}</option>{% endfor %}
+              </select>
+            </div>
+            </div>
+
+            <div class="form-group">
+                <label for="inputPassword3" class="col-sm-3 control-label">产品名称1</label>
+                <div class="col-sm-6">
+                    <select class="input-sm form-control"  id="all_products1" name="product1" style="padding-top: 1px; padding-bottom: 1px">
+                         <option value="">请选择</option>
+                        {% for product in products %} <option value="{{ product.productid }}">{{ product.productname }}</option>{% endfor %}
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+              <label class="col-sm-3 control-label">产品种类2</label>
+              <div class="col-sm-6">
+              <select class="input-sm form-control" onchange="ajax_load_product2()" name="category2" id="category_select2">
+                <option value="">请选择</option>
+                 {% for category in categories %} <option value="{{ category.categoryid }}">{{ category.categoryname }}</option>{% endfor %}
+              </select>
+            </div>
+            </div>
+
+            <div class="form-group">
+                <label for="inputPassword3" class="col-sm-3 control-label">产品名称2</label>
+                <div class="col-sm-6">
+                    <select class="input-sm form-control"  id="all_products2" name="product2" style="padding-top: 1px; padding-bottom: 1px">
+                         <option value="">请选择</option>
+                        {% for product in products %} <option value="{{ product.productid }}">{{ product.productname }}</option>{% endfor %}
+                    </select>
+                </div>
+            </div>
+
+
+            <div class="form-group">
+              <label class="col-sm-3 control-label">开始时间</label>
+              <div class="controls col-sm-6">
+                <input class="form-control date"  name="startTime" id="startTime" data-date-format="dd-mm-yyyy" placeholder="请选择开始时间"/>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-sm-3 control-label">结束时间</label>
+              <div class="controls col-sm-6">
+                <input class="form-control date" name="endTime" id="endTime" data-date-format="dd-mm-yyyy" placeholder="请选择结束时间" />
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="controls center">
+                  <input type="hidden" name="btn_submit" id="btn_submit">
+                  <button id="inquiry_btn" type="button" class="btn btn-success" onclick="ajax_load_product1(this)">查询</button>
+              </div>
+            </div>
+          </form>
+
+		  </div>
+
+		  </div>
+      </div>
+    </div>
+    <!--左栏结束-->
+    <!--右栏开始-->
+    <div class="col-md-8 ">
+         {% if msg %}<div>{{ msg }}</div>{% endif %}
+      <!--form-right-wrap开始-->
+      <div class="form-right-wrap-analysis">
+        <div class="news-analysisright-wrapper">
+         <!--标题开始-->
+        <div>
+            <h4 class="text-center">  <div>{{ start_time }}—{{ end_time }}{{ market_post.marketname}}<br/>{{ product_post1.productname }}和{{ product_post2.productname }}价格比较图(单位：元/公斤)<br/>&nbsp;</div></h4>
+        </div>
+        <!--标题结束-->
+		  <!--图表展示开始-->
+          <div id="main" style="width: 850px;height:400px;"></div>
+		 <!--图表展示结束-->
+{#	 <!-- 收藏区开始-->#}
+{#	      <div class="wrap-newsdetails-left"><div class="collection">#}
+{#      <button type="button" class="btn btn-danger"> <span class="glyphicon glyphicon-star-empty" aria-hidden="true"></span> &nbsp;收&nbsp;藏 </button>#}
+{#      <!--	<button type="button" class="btn btn-danger active">#}
+{#	<span class="glyphicon glyphicon-star" aria-hidden="true"></span>已收藏#}
+{#	</button>-->#}
+{#	</div>#}
+{#	  <!--收藏区结束-->#}
+
+          <!--右栏文字简单说明开始-->
+		  <div class="panel-style">
+          <div class="panel panel-danger">
+            <div class="panel-heading">
+              <h3 class="panel-title">分析</h3>
+            </div>
+            <div class="panel-body">
+                <table class="text-center table table-striped table-bordered">
+                    <tr><th colspan="3" class="text-center">{{ product_post1.productname }}</th></tr>
+                    <tr>
+                        <td>最大值：{{ analysis1.max }}元/公斤</td>
+                        <td>最小值：{{ analysis1.min }}元/公斤</td>
+                        <td>平均值：{{ analysis1.mean }}元/公斤</td>
+                    </tr>
+                    <tr>
+                        <td>众数：{{ analysis1.mode }}元/公斤</td>
+                        <td>中位数：{{ analysis1.median }}元/公斤</td>
+                        <td>离散系数：{{ analysis1.cv }}</td>
+                    </tr>
+                    <tr><th colspan="3" class="text-center">{{ product_post2.productname }}</th></tr>
+                    <tr>
+                        <td>最大值：{{ analysis2.max }}元/公斤</td>
+                        <td>最小值：{{ analysis2.min }}元/公斤</td>
+                        <td>平均值：{{ analysis2.mean }}元/公斤</td>
+                    </tr>
+                    <tr>
+                        <td>众数：{{ analysis2.mode }}元/公斤</td>
+                        <td>中位数：{{ analysis2.median }}元/公斤</td>
+                        <td>离散系数：{{ analysis2.cv }}</td>
+                    </tr>
+                </table>
+                <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ start_time }}—{{ end_time }}，{{ market_post.marketname }}的<strong>{{ product_post1.productname }}</strong>平均价格为{{ analysis1.mean }}元/公斤，最高价格为{{ analysis1.max }}元/公斤，最低价格为{{ analysis1.min }}元/公斤， 离散系数为{{ analysis1.cv }}；
+                    <strong>{{ product_post2.productname }}</strong>的平均价格为{{ analysis2.mean }}元/公斤，最高价格为{{ analysis2.max }}元/公斤，最低价格为{{ analysis2.min }}元/公斤，离散系数为{{ analysis2.cv }}。</P>
+               <P>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 对比可以看出，在{{ start_time }}—{{ end_time }}期间，本市场{% if  analysis1.cv > analysis2.cv  %}{{ product_post1.productname }}产品价格波动较大，{{ product_post2.productname }}产品价格波动较小{% elif  analysis1.cv < analysis2.cv %}{{ product_post2.productname }}产品价格波动较大，{{ product_post2.productname }}产品价格波动较小{% else %}在两产品价格波动波动相当{% endif %}（较大或较小，根据离散系数判断，计算方法为标准差除以平均值）。</p>
+
+            </div>
+          </div>
+		  </div>
+          <!--右栏文字简单说明结束-->
+        </div>
+		  </div>
+      <!--form-right-wrap结束-->
+    </div>
+    <!-- 右栏结束-->
+  </div>
+</div>
+</div>
+
+<script type="text/javascript">
+var myChart = echarts.init(document.getElementById('main'));
+
+var option = {
+    title: {
+        text: '',
+{#        subtext: '纯属虚构'#}
+    },
+    tooltip: {
+        trigger: 'axis'
+    },
+    legend: {
+        data:['{{ product_post1.productname }}','{{ product_post2.productname }}']
+    },
+    toolbox: {
+        show: true,
+        feature: {
+            dataZoom: {
+                yAxisIndex: 'none'
+            },
+            dataView: {readOnly: false},
+            magicType: {type: ['line', 'bar']},
+            restore: {},
+            saveAsImage: {}
+        }
+    },
+    xAxis:  {
+        type: 'category',
+        boundaryGap: false,
+        data: {{ time_set|safe }}
+    },
+    yAxis: {
+        type: 'value',
+        axisLabel: {
+            formatter: '{value}'
+        }
+    },
+    series: [
+        {
+            name:'{{ product_post1.productname }}',
+            type:'line',
+            data:{{ price_set1 }},
+            markPoint: {
+                data: [
+                    {type: 'max', name: '最大值'},
+                    {type: 'min', name: '最小值'}
+                ]
+            },
+            markLine: {
+                data: [
+                    {type: 'average', name: '平均值'}
+                ]
+            }
+        },
+        {
+            name:'{{ product_post2.productname }}',
+            type:'line',
+            data:{{ price_set2 }},
+            markPoint: {
+                data: [
+                    {type: 'max', name: '最大值'},
+                    {type: 'min', name: '最小值'}
+                ]
+            },
+            markLine: {
+                data: [
+                    {type: 'average', name: '平均值'}
+                ]
+            }
+        }
+    ]
+};
+
+myChart.setOption(option);
+</script>
+
+
+
+<script type="text/javascript">
+    {% if miss %}
+        alert('{{ miss }}')
+    {% endif %}
+function ajax_load_product1(e) {
+    var form1 = document.getElementById("form1");
+    var e_id = $(e).attr('id')
+    var category1=document.forms["form1"]["category1"].value;
+    var product1=document.forms["form1"]["product1"].value;
+    var category2=document.forms["form1"]["category2"].value;
+    var product2=document.forms["form1"]["product2"].value;
+    var province=document.forms["form1"]["province"].value;
+    var market=document.forms["form1"]["market"].value;
+    var start_time=document.forms["form1"]["startTime"].value;
+    var end_time=document.forms["form1"]["endTime"].value;
+    if(e_id=='inquiry_btn'){
+        if(product1=='' || category1=="" || product2=='' || category2=="" || province==""||market=="" || start_time=='' || end_time==''){
+            alert("有筛选信息未填写，请检查！");
+            return false;
+        }
+        if(start_time >= end_time){
+            alert("日期选择范围错误，请检查！");
+            return false;
+        }
+        if(start_time< '2014-01-01'){
+            alert("只提供2014年及以后的价格信息，请重新选择。");
+            return false;
+        }
+        $("#btn_submit").val("true");
+        form1.submit();
+    }
+    else{
+        $.ajax({
+            cache:false,
+            type:"POST",
+            url:"{% url 'products:price_analysis4' %}",
+            data:{
+                'category1':$("#category_select1").val(),
+                 'market':$("#all_markets").val(),
+                 'verify2':'yes'
+            },
+            async:true,
+            beforeSend:function (xhr,settings) {
+                xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}")
+            },
+            success:function (data) {
+                if(data.status == 'success'){
+                        var selection1 = $("#all_products1");
+                        selection1.find("option").remove();
+                        selection1.append("<option value=''>请选择</option>");
+                        for(var x in data){
+                            if(x=='product1')
+                                for(var y in data[x])
+                                    selection1.append("<option value='"+y+"'>"+data[x][y]+"</option>");
+                        }
+                        selection.width(153);
+                    }
+                }
+            })}
+}
+</script >
+
+<script type="text/javascript">
+function ajax_load_product2(e) {
+    var form1 = document.getElementById("form1");
+    var e_id = $(e).attr('id')
+    if(e_id=='inquiry_btn'){
+        $("#btn_submit").val("true");
+        form1.submit();
+    }
+    else{
+        $.ajax({
+            cache:false,
+            type:"POST",
+            url:"{% url 'products:price_analysis4' %}",
+            data:{
+                'category2':$("#category_select2").val(),
+                'market':$("#all_markets").val()
+            },
+            async:true,
+            beforeSend:function (xhr,settings) {
+                xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}")
+            },
+            success:function (data) {
+                if(data.status == 'success'){
+                        var selection2 = $("#all_products2");
+                        selection2.find("option").remove();
+                        selection2.append("<option value=''>请选择</option>");
+                        for(var x in data){
+                            if(x=='product2')
+                                for(var y in data[x])
+                                    selection2.append("<option value='"+y+"'>"+data[x][y]+"</option>");
+                        }
+                        selection.width(153);
+                    }
+                }
+            })}
+}
+</script >
+
+<script type="text/javascript">
+function ajax_load_market(e) {
+{#    var form1 = document.getElementById("form1");#}
+    var e_id = $(e).attr('id')
+    if(e_id=='province_select'){
+        $.ajax({
+            cache:false,
+            type:"POST",
+            url:"{% url 'products:price_analysis1' %}",
+            data:{
+                'province':$("#province_select").val(),
+                'product1':$("#all_products1").val(),
+                'verify':'yes'
+            },
+            async:true,
+            beforeSend:function (xhr,settings) {
+                xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}")
+            },
+            success:function (data) {
+                if(data.status == 'success'){
+                        var selection2 = $("#all_markets");
+                        selection2.find("option").remove();
+                        selection2.append("<option value=''>请选择</option>");
+                        for(var x in data){
+                            if(x=='market')
+                                for(var y in data[x])
+                                    selection2.append("<option value='"+y+"'>"+data[x][y]+"</option>");
+                        }
+                        selection.width(153);
+                    }
+                }
+            })
+    }
+
+}
+</script >
+
+
+
+{% endblock %}
+
+

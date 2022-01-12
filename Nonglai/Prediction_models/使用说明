@@ -1,0 +1,43 @@
+此文件包是为东华大学农莱小站项目服务的后台预测模型以及相应的脚本，主要包括四部分，分别为：
+1.Data_Operations
+此包下包含db_operation子包，主要功能为：
+（1）连接数据库，并提供基础的读取、建表和更新等功能；
+（2）处理输入模型的数据，例如进行缩放等处理；
+（3）将从模型获得的数据写入数据库相应的表。
+2.EMD_SVR
+此包下包含EMD和SVR两个子模块：
+（１）ＥＭＤ模块用于对基础价格数据进行分解（经验模式分解），并将分解后的数据写入预测数据库；
+（2）SVR模块使用SVR（支持向量回归）对EMD分解得到的模式进行预测，并整合得到预测的价格数据，最
+终写入或者更新到数据库。
+3.LSTM
+此包下包含core，saved_model和三个子模块：
+（1）core模块为模型的核心模块，此部分封装了LSTM（长短记忆神经网络）类以及相应的一些方法和属性；
+（2）save_model文件夹内存放训练好的LSTM模型，以便之后使用；
+（3）run为脚本的启动模块，运行此模块则开始读取数据，训练模型或者直接载入模型进行预测。
+4.Update
+（1）在基础数据库数据更新后，自动执行脚本，将新数据输入模型，得到结果后写入数据库。
+注意：此脚本基于农莱小站项目后台数据库（nonglai）的数据进行预测，同时使用新的数据库（prediction）
+用于存储预测相关数据。
+此包的运行依赖环境为：
+python 3.5.2
+pandas 0.24.1
+sklearn 0.20.3
+numpy 1.16.2
+pymysql 0.9.3
+matplotlib 3.0.3
+scipy 1.2.1
+keras 2.2.4
+
+使用说明：
+（1）首先应该初始化，将nonglai数据库中的价格数据进行处理，然后导入到prediction数据库中：
+EMD_SVE->EMD->run.py,将主函数（main）下除了write_decomposed_data()方法的代码全部注释，
+只运行write_decomposed_data（）方法。
+（2）将预测的分解数据写入prediction数据库：
+EMD_SVE->SVR->SVR.py,将主函数下除write_multi_predict()方法外的其他代码全部注释，只运行，
+write_multi_predict()方法。
+（3）使用EMD_SVR方法预测价格：
+EMD_SVE->SVR->SVR.py,将主函数下除actual_predict()方法外的其他代码全部注释，只运行，
+将主函数下除actual_predict()方法。
+（4）使用LSTM
+（5）定时运行
+
